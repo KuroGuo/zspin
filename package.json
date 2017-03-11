@@ -1,0 +1,24 @@
+{
+  "name": "zroulette",
+  "version": "0.0.1",
+  "description": "zcoin roulette",
+  "main": "index.js",
+  "private": true,
+  "author": "kuro",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "config": "^1.25.1",
+    "cookie-session": "^2.0.0-beta.1",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "i18n": "^0.8.3",
+    "log4js": "^1.1.1",
+    "nodemailer": "^3.1.5",
+    "pg": "^6.1.4",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.30.2"
+  },
+  "scripts": {
+    "start": "node index"
+  }
+}
