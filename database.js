@@ -1,10 +1,9 @@
 const config = require('config')
+const Sequelize = require('sequelize')
 
 const databaseConfig = config.get('database')
 
 module.exports = () => {
-  const Sequelize = require('sequelize')
-
   const sequelize = new Sequelize(
     databaseConfig.uri,
     databaseConfig.options || {}
