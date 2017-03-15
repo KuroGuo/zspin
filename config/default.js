@@ -1,7 +1,8 @@
 module.exports = {
+  siteURL: 'https://zspin.zcoin.io/',
   sessionSecret: 'secret',
   database: {
-    uri: 'postgres://dalunpan:zhongjiangla@localhost:5432/dalunpan',
+    uri: 'postgres://zspin:password@localhost:5432/zspin',
 
     // options: {
     //   logging: false
@@ -14,5 +15,6 @@ module.exports = {
       user: 'your@email.com',
       pass: 'password'
     }
-  }
+  },
+  jsonWebTokenSecret: 'secret'
 }

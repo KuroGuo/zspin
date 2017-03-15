@@ -1,0 +1,98 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  color: white;
+  background-color: #20202E;
+  background-image: url(/background.jpg);
+  background-repeat: no-repeat;
+  background-position: left top;
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.textbox {
+  height: 28px;
+  overflow: hidden;
+  position: relative;
+  background-color: white;
+  box-shadow: inset 0 1px 3px #878f90;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+          align-items: center;
+}
+input {
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 12px;
+}
+
+.button {
+  background-color: #2db556;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 12px;
+  height: 30px;
+  padding: 0 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+          user-select: none;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+          align-items: center;
+}
+
+.title {
+  width: 160px;
+  height: 62px;
+  background-image: url(/title.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin: 0 auto 40px auto;
+}
+
+.page {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  min-height: 76.4%;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.container {
+  padding: 40px 10px;
+}
+
+.form {
+  padding: 20px;
+  font-size: 15px;
+  background-color: rgba(255, 255, 255, .1);
+  text-align: center;
+}

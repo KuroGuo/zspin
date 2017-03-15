@@ -1,10 +1,51 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title><%= __('你好') %></title>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>Zspin</title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <style>
+      .form-title {
+        margin-bottom: 20px;
+      }
+      .textbox {
+        margin-bottom: 10px;
+      }
+      .button-login {
+        margin-top: 10px;
+      }
+      .textbox-label {
+        color: #555;
+        font-size: 12px;
+        padding-left: 9px;
+      }
+    </style>
   </head>
   <body>
-    <h1><%= __('你好') %></h1>
+    <div class="page" id="app">
+      <div class="container">
+        <div class="title"></div>
+        <form class="form" method="post">
+          <div class="form-title">LOG IN TO YOUR ACCOUNT</div>
+          <div class="textbox">
+            <span class="textbox-label">Email:</span>
+            <input name="email" type="email" required="required" />
+          </div>
+          <input id="button-submit" type="submit" style="display: none;" />
+          <span class="button button-login" onclick="submit()">LOG IN</span>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function submit() {
+        var buttonSubmit = document.querySelector('#button-submit')
+        buttonSubmit.click()
+      }
+    </script>
   </body>
 </html>
