@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Who is Zcoin's founder?",
+    "options": [
+      "Poramin Isnom",
+      "Roger Ver",
+      "Matthew Green"
+    ],
+    "answer": "Poramin Isnom"
+  },
+  {
+    "title": "How much is the total supply of Zcoin?",
+    "options": [
+      "84 million",
+      "21 million",
+      "100 million"
+    ],
+    "answer": "21 million"
+  },
+  {
+    "title": "When is Zcoin released?",
+    "options": [
+      "October 28, 2016",
+      "March 15, 2014",
+      "September 28, 2016"
+    ],
+    "answer": "September 28, 2016"
+  }
+]

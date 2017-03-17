@@ -23,15 +23,14 @@ module.exports = (database, logger, transporter) => {
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
 
-  app.use(cookieSession({
-    name: 'session',
-    secret: config.get('sessionSecret'),
-    maxAge: 100 * 365 * 24 * 60 * 60 * 1000
-  }))
+  app.use(cookieSession(config.get('cookieSession')))
 
   app.use('/api', apiRouter)
   app.use(pageRouter)
-  app.use(express.static(path.normalize(`${__dirname}/static`)))
+  app.use(express.static(
+    path.normalize(`${__dirname}/static`),
+    config.get('static')
+  ))
 
   app.use((req, res) => { res.redirect('/') })
 

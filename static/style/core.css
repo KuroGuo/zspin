@@ -8,8 +8,20 @@ body {
   background-image: url(/background.jpg);
   background-repeat: no-repeat;
   background-position: left top;
+  background-attachment: fixed;
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.link {
+  color: white;
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+  text-decoration: none;
+}
+.link:hover {
+  text-decoration: underline;
 }
 
 .textbox {
@@ -25,7 +37,7 @@ body {
   -ms-flex-align: center;
           align-items: center;
 }
-input {
+.input {
   width: 100%;
   height: 100%;
   padding: 0 8px;
@@ -33,6 +45,11 @@ input {
   outline: none;
   background-color: transparent;
   font-size: 12px;
+}
+
+.radio label {
+  line-height: 1.8em;
+  display: inline-block;
 }
 
 .button {

@@ -1,6 +1,13 @@
 module.exports = {
   siteURL: 'https://zspin.zcoin.io/',
-  sessionSecret: 'secret',
+  cookieSession: {
+    name: 'session',
+    secret: 'secret',
+    maxAge: 100 * 365 * 24 * 60 * 60 * 1000
+  },
+  static: {
+    maxAge: 10 * 60 * 1000
+  },
   database: {
     uri: 'postgres://zspin:password@localhost:5432/zspin',
 

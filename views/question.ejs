@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>Zspin</title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <style>
+      .question-options {
+        text-align: left;
+        margin-top: 12px;
+      }
+      .button-next {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="app">
+      <div class="container">
+        <div class="title"></div>
+        <form id="form" class="form" method="post">
+          <div class="question-title">
+            <%= question.title %>
+            <input type="hidden" name="title" value="<%= question.title %>" />
+          </div>
+          <div class="question-options">
+            <% question.options.forEach((option, i) => { %>
+              <div class="radio">
+                <input
+                  id="radio_option<%= i %>"
+                  type="radio"
+                  name="answer"
+                  value="<%= option %>"
+                  required="required" />
+                <label for="radio_option<%= i %>">
+                  <%= option %>
+                </label>
+              </div>
+            <% }) %>
+          </div>
+          <input id="button-submit" type="submit" style="display: none;" />
+          <span class="button button-next" onclick="submit()">NEXT</span>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.querySelector('#form').reset()
+
+      function submit() {
+        var buttonSubmit = document.querySelector('#button-submit')
+        buttonSubmit.click()
+      }
+    </script>
+  </body>
+</html>
