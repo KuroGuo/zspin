@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>Zspin</title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <style>
+      .message {
+        white-space: pre;
+        line-height: 1.618em;
+      }
+      .spinner-wrapper {
+        width: 270px;
+        height: 270px;
+        position: relative;
+      }
+      .spinner {
+        width: 100%;
+        height: 100%;
+        background-image: url(/style/images/spinner.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 274px;
+        border-radius: 100%;
+        will-change: transform;
+      }
+      .button-spin {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        width: 102px;
+        height: 102px;
+        background-image: url(/style/images/button-spin.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 103px;
+        border-radius: 100%;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+                user-select: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .spinner-pointer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -46px;
+        margin: 0 auto;
+        background-image: url(/style/images/pointer.png);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        width: 15px;
+        height: 98px;
+        pointer-events: none;
+      }
+      .panel {
+        margin-top: 50px;
+        background-color: #21202f;
+        font-size: 12px;
+        border-radius: 4px;
+      }
+      .panel-row {
+        padding: 10px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+      }
+      .panel-button {
+        border: 1px solid currentColor;
+        border-radius: 12px;
+        padding: 0 6px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+                user-select: none;
+        -webkit-transform: scale(.8);
+        transform: scale(.8);
+        -webkit-transform-origin: center right;
+                transform-origin: center right;
+      }
+      #mask {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 1000;
+        display: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+                user-select: none
+      }
+      #mask.show {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="app">
+      <div class="container">
+        <div class="title"></div>
+        <div class="spinner-wrapper">
+          <div id="spinner" class="spinner"></div>
+          <div id="button_spin" class="button-spin"></div>
+          <div class="spinner-pointer"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-row panel-row-balance">
+            <div>BALANCE: <span class="value-balance"></span> XZC</div>
+            <a class="panel-button">WITHDRAWAL</a>
+          </div>
+          <div class="panel-row panel-row-rewards">
+            <div>REWARDS: <span class="value-rewards"></span> T-Shirt</div>
+            <a class="panel-button">CLAIM</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mask"></div>
+
+    <script>
+      ;(function () {
+        var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame
+                            || window.mozRequestAnimationFrame || window.msRequestAnimationFrame
+
+        var rotate = 0
+        var rotateOffset = 20
+        var lastFrameRotate
+        var speed = 0
+        var maxSpeed = 360 * 3
+
+        var frame, motion = function () {}
+
+        var results = [0, 62, 117, 180, 241, 297]
+
+        var spinner = document.querySelector('#spinner')
+        var buttonSpin = document.querySelector('#button_spin')
+        var mask = document.querySelector('#mask')
+
+        mask.addEventListener('mousedown', function (e) {
+          e.preventDefault()
+        })
+
+        buttonSpin.addEventListener('mousedown', function (e) {
+          e.preventDefault()
+        })
+        buttonSpin.addEventListener('click', function () {
+          spin()
+        })
+
+        render()
+
+        function showMask() {
+          mask.classList.add('show')
+        }
+        function closeMask() {
+          mask.classList.remove('show')
+        }
+
+        function spin() {
+          showMask()
+          start()
+          var xmr = new XMLHttpRequest()
+          xmr.responseType = 'json'
+          var timeSend = new Date().getTime()
+          xmr.addEventListener('load', function (e) {
+            console.log(e.currentTarget.response)
+            setTimeout(function () {
+              end(results[Math.floor(Math.random() * results.length)], function () {
+                closeMask()
+              })
+            }, Math.max(3000 - (new Date().getTime() - timeSend), 0))
+          })
+          xmr.open("post", "/api/record", true)
+          xmr.send()
+        }
+        function start() {
+          var a = 360 * 6
+          motion = function (timespan) {
+            speed += a * (timespan / 1000)
+            if (speed > maxSpeed) speed = maxSpeed
+            rotate += speed * (timespan / 1000)
+          }
+        }
+
+        function end(result, callback) {
+          var od = (360 - rotate % 360) + 6 * 360 + result
+          var d, t, a, gone = 0
+          motion = function (timespan) {
+            d = od - gone
+            t = d / (speed / 2) - timespan / 1000
+            a = speed / t
+            speed -= a * (timespan / 1000)
+            if (speed < 0.000001) {
+              speed = 0
+              motion = null
+              return callback()
+            }
+            rotate += speed * (timespan / 1000)
+            gone += speed * (timespan / 1000)
+          }
+        }
+
+        function render(lastTime) {
+          requestAnimationFrame(function (time) {
+            if (!lastTime) lastTime = time
+            if (motion) motion(time - lastTime)
+            if (rotate === lastFrameRotate) return render(time)
+            render(time)
+            var r = ((rotate + rotateOffset) % 360).toFixed(6)
+            transform(spinner, 'rotate(' + r + 'deg)')
+            lastFrameRotate = rotate
+          })
+        }
+
+        function transform(element, value) {
+          if (typeof element.style.transform === 'string') {
+            element.style.transform = value
+          } else if (typeof element.style.webkitTransform === 'string') {
+            element.style.webkitTransform = value
+          }
+        }
+      })()
+    </script>
+  </body>
+</html>

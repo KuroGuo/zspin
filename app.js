@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session')
 const config = require('config')
 const bodyParser = require('body-parser')
 const path = require('path')
+const compression = require('compression')
 
 const apiRouter = require('./routers/api')
 const pageRouter = require('./routers/page')
@@ -24,6 +25,8 @@ module.exports = (database, logger, transporter) => {
   app.use(bodyParser.json())
 
   app.use(cookieSession(config.get('cookieSession')))
+
+  app.use(compression())
 
   app.use('/api', apiRouter)
   app.use(pageRouter)

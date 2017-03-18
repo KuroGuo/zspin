@@ -2,9 +2,18 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/emails', async function (req, res) {
-  const emails = await req.app.db.User.findAll()
-  res.send(emails)
-})
+router.post('/record', async function (req, res, next) { try {
+  const email = req.session.user.email
+
+  const User = req.app.db.User
+
+  const user = await User.findOne({ where: { email } })
+
+  // user.addRecord({
+    // type: ''
+  // })
+
+  res.end()
+} catch (err) { next(err) } })
 
 module.exports = router

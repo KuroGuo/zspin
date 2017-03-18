@@ -5,12 +5,18 @@ html, body {
 body {
   color: white;
   background-color: #20202E;
-  background-image: url(/background.jpg);
+  background-image: url(images/background.jpg);
   background-repeat: no-repeat;
-  background-position: left top;
   background-attachment: fixed;
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+@media (min-width: 1000px) {
+  body {
+    background-size: cover;
+  }
 }
 
 .link {
@@ -78,20 +84,15 @@ body {
 .title {
   width: 160px;
   height: 62px;
-  background-image: url(/title.png);
+  background-image: url(images/title.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  margin: 0 auto 40px auto;
+  margin: 0 auto 50px auto;
 }
 
 .page {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
   min-height: 76.4%;
-  margin: 0 auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -104,7 +105,12 @@ body {
 }
 
 .container {
-  padding: 40px 10px;
+  padding: 50px 10px;
+}
+@media (max-height: 600px) {
+  .container {
+    padding-bottom: 20px;
+  }
 }
 
 .form {

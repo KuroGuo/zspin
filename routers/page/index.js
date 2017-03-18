@@ -10,9 +10,19 @@ const arrayHelper = require('../../helpers/array')
 
 const router = express.Router()
 
-router.get('/', requireLogin, requireAnswered, (req, res) => {
-  res.send('Zspin')
-})
+router.get('/', requireLogin, requireAnswered, async function (req, res, next) { try {
+  const User = req.app.db.User
+
+  const email = req.session.user.email
+
+  const user = await User.findOne({ where: { email } })
+
+  const records = await user.getUnsentRecords()
+
+  console.log(records)
+
+  res.render('home')
+} catch (err) { next(err) } })
 
 router.get('/login', (req, res) => {
   res.render('login')
