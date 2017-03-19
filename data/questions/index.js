@@ -1,16 +1,13 @@
-const fs = require('fs')
 const path = require('path')
+const file = require('../../helpers/file')
 
-const cacheTimeout = 10 * 60 * 1000
+const fileLoader =  new file.Loader('json')
 
-let cache
-
-exports.load = force => new Promise((resolve, reject) => {
-  if (!force && cache) return resolve(cache)
-  fs.readFile(path.normalize(`${__dirname}/questions.json`), (err, data) => {
-    if (err) return reject(err)
-    cache = JSON.parse(data)
-    setTimeout(() => { cache = null }, cacheTimeout)
-    resolve(cache)
-  })
-})
+exports.load = async function (force) {
+  const filename = process.env.NODE_ENV === 'production' ?
+    'questions.prod.json' : 'questions.json'
+  return await fileLoader.load(
+    path.normalize(`${__dirname}/${filename}`),
+    force
+  )
+}

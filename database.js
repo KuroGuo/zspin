@@ -15,18 +15,30 @@ module.exports = () => {
   }, {
     indexes: [ { unique: true, fields: ['email'] } ],
     instanceMethods: {
-      getUnsentRecords() {
-         return this.getRecords({ where: { sent: { $not: true } } })
+      async getBalance() {
+        const records = this.records || (await this.getRecords())
+        return records
+          .filter(r => r.type === 'zcoin')
+          .map(r => parseFloat(r.amount))
+          .reduce(((a, b) => a + b), 0)
+      },
+      async getTShirt() {
+        const records = this.records || (await this.getRecords())
+        return records
+          .filter(r => r.type === 't_shirt')
+          .map(r => parseFloat(r.amount))
+          .reduce(((a, b) => a + b), 0)
       }
     }
   })
 
   const Record = sequelize.define('record', {
     type: { type: Sequelize.ENUM('zcoin', 't_shirt') },
-    amount: { type: Sequelize.INTEGER },
+    amount: { type: Sequelize.DECIMAL },
     sent: { type: Sequelize.BOOLEAN }
   }, {
-    indexes: [ { fields: ['sent'] } ]
+    indexes: [ { fields: ['sent'] } ],
+    defaultScope: { where: { sent: { $not: true } } }
   })
 
   User.hasMany(Record)
@@ -35,6 +47,7 @@ module.exports = () => {
 
   return {
     sequelize,
-    User
+    User,
+    Record
   }
 }

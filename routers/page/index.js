@@ -12,16 +12,21 @@ const router = express.Router()
 
 router.get('/', requireLogin, requireAnswered, async function (req, res, next) { try {
   const User = req.app.db.User
+  const Record = req.app.db.Record
 
   const email = req.session.user.email
 
-  const user = await User.findOne({ where: { email } })
+  const user = await User.findOne({
+    where: { email },
+    include: [Record]
+  })
 
-  const records = await user.getUnsentRecords()
+  const values = await Promise.all([user.getBalance(), user.getTShirt()])
 
-  console.log(records)
+  const balance = values[0].toFixed(2)
+  const tShirt = values[1].toFixed()
 
-  res.render('home')
+  res.render('home', { balance, tShirt })
 } catch (err) { next(err) } })
 
 router.get('/login', (req, res) => {
@@ -59,7 +64,7 @@ router.post('/login', async function (req, res, next) { try {
       email
     }, jwtSecret)
 
-    const link = `${siteURL}confirm?token=${token}`
+    const link = `${siteURL}confirm?token=${encodeURIComponent(token)}`
 
     transporter.sendMail({
       from: `"Zspin" <${config.get('transporter').auth.user}>`,
@@ -83,6 +88,11 @@ router.post('/login', async function (req, res, next) { try {
     })
   }
 } catch (err) { next(err) } })
+
+router.post('/logout', (req, res) => {
+  req.session = null
+  res.redirect('/')
+})
 
 router.get('/confirm', async function (req, res, next) { try {
   const token = req.query.token

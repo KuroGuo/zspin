@@ -9,10 +9,6 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <link rel="stylesheet" href="/style/core.css" />
     <style>
-      .message {
-        white-space: pre;
-        line-height: 1.618em;
-      }
       .spinner-wrapper {
         width: 270px;
         height: 270px;
@@ -27,6 +23,8 @@
         background-size: 274px;
         border-radius: 100%;
         will-change: transform;
+        -webkit-transform: rotate(20deg);
+                transform: rotate(20deg);
       }
       .button-spin {
         position: absolute;
@@ -47,7 +45,10 @@
         -ms-user-select: none;
                 user-select: none;
         cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
+      }
+      .button-spin.depressed {
+        -webkit-transform: scale(.97);
+                transform: scale(.97);
       }
       .spinner-pointer {
         position: absolute;
@@ -68,12 +69,17 @@
         background-color: #21202f;
         font-size: 12px;
         border-radius: 4px;
+        font-family: Menlo, Monaco, Consolas, monospace;
+        padding: 10px 10px 0;
       }
       .panel-row {
-        padding: 10px;
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
+        padding-bottom: 10px;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+                align-items: center;
         -webkit-box-pack: justify;
             -ms-flex-pack: justify;
                 justify-content: space-between;
@@ -82,14 +88,11 @@
         border: 1px solid currentColor;
         border-radius: 12px;
         padding: 0 6px;
+        font-size: 10px;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
                 user-select: none;
-        -webkit-transform: scale(.8);
-        transform: scale(.8);
-        -webkit-transform-origin: center right;
-                transform-origin: center right;
       }
       #mask {
         position: fixed;
@@ -99,6 +102,7 @@
         bottom: 0;
         z-index: 1000;
         display: none;
+        cursor: wait;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -106,6 +110,9 @@
       }
       #mask.show {
         display: block;
+      }
+      .form-logout {
+        text-align: center;
       }
     </style>
   </head>
@@ -120,21 +127,35 @@
         </div>
         <div class="panel">
           <div class="panel-row panel-row-balance">
-            <div>BALANCE: <span class="value-balance"></span> XZC</div>
+            <div>BALANCE: <span id="value_balance"><%= balance %></span> XZC</div>
             <a class="panel-button">WITHDRAWAL</a>
           </div>
           <div class="panel-row panel-row-rewards">
-            <div>REWARDS: <span class="value-rewards"></span> T-Shirt</div>
+            <div>REWARDS: <span id="value_tshirt"><%= tShirt %></span> T-Shirt</div>
             <a class="panel-button">CLAIM</a>
           </div>
         </div>
+        <form class="form-logout" method="post" action="/logout">
+          <input id="form_logout_button_submit" type="submit" style="display: none;" />
+          <a class="link link-logout" onclick="document.querySelector('#form_logout_button_submit').click()">LOG OUT</a>
+        </form>
       </div>
     </div>
 
     <div id="mask"></div>
 
+    <div id="dialog" class="dialog">
+      <div class="dialog-container">
+        <div class="dialog-body">
+          <div id="dialog_message" class="dialog-message"></div>
+          <span class="dialog-button-close" onclick="document.querySelector('#dialog').classList.remove('show')">OK</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="/k-tap.js"></script>
     <script>
-      ;(function () {
+      ;(function () { 'use strict'
         var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame
                             || window.mozRequestAnimationFrame || window.msRequestAnimationFrame
 
@@ -146,11 +167,20 @@
 
         var frame, motion = function () {}
 
-        var results = [0, 62, 117, 180, 241, 297]
+        var spinnerRotates = {
+          '0.01 XZC': 0,
+          '1 XZC': 62,
+          '0.1 XZC': 117,
+          '3 XZC': 180,
+          '0.03 XZC': 241,
+          '1 T-Shirt': 297
+        }
 
         var spinner = document.querySelector('#spinner')
         var buttonSpin = document.querySelector('#button_spin')
         var mask = document.querySelector('#mask')
+        var valueBalance = document.querySelector('#value_balance')
+        var valueTshirt = document.querySelector('#value_tshirt')
 
         mask.addEventListener('mousedown', function (e) {
           e.preventDefault()
@@ -158,8 +188,17 @@
 
         buttonSpin.addEventListener('mousedown', function (e) {
           e.preventDefault()
+          buttonSpin.classList.add('depressed')
         })
-        buttonSpin.addEventListener('click', function () {
+        buttonSpin.addEventListener('touchstart', function (e) {
+          e.preventDefault()
+          buttonSpin.classList.add('depressed')
+        })
+        buttonSpin.addEventListener('ktapcancel', function () {
+          buttonSpin.classList.remove('depressed')
+        })
+        buttonSpin.addEventListener('ktap', function () {
+          buttonSpin.classList.remove('depressed')
           spin()
         })
 
@@ -175,19 +214,44 @@
         function spin() {
           showMask()
           start()
-          var xmr = new XMLHttpRequest()
-          xmr.responseType = 'json'
+          var xhr = new XMLHttpRequest()
           var timeSend = new Date().getTime()
-          xmr.addEventListener('load', function (e) {
-            console.log(e.currentTarget.response)
+          xhr.addEventListener('load', function (e) {
+            var xhr = e.currentTarget
+            var response = JSON.parse(xhr.responseText)
+            if (response && response.error) {
+              closeMask()
+              return alert(response.error)
+            }
+            if (xhr.status !== 201) {
+              closeMask()
+              return alert('Error: ' + xhr.statusText)
+            }
+            var resultName = response.name
+            var balance = response.user.balance
+            var tShirt = response.user.tShirt
             setTimeout(function () {
-              end(results[Math.floor(Math.random() * results.length)], function () {
+              end(spinnerRotates[resultName], function () {
+                valueBalance.innerHTML = balance
+                valueTshirt.innerHTML = tShirt
                 closeMask()
+                showDialog([
+                  '<div class="dialog-title">Congratulations</div>',
+                  'You get<strong> ' + resultName + '</strong>'
+                ].join(''))
               })
             }, Math.max(3000 - (new Date().getTime() - timeSend), 0))
           })
-          xmr.open("post", "/api/record", true)
-          xmr.send()
+          xhr.addEventListener('timeout', function () {
+            closeMask()
+            alert('Timeout.')
+          })
+          xhr.addEventListener('error', function (e) {
+            closeMask()
+            alert('Network error.')
+          })
+          xhr.open("post", "/api/record", true)
+          xhr.send()
         }
         function start() {
           var a = 360 * 6
@@ -234,6 +298,13 @@
           } else if (typeof element.style.webkitTransform === 'string') {
             element.style.webkitTransform = value
           }
+        }
+
+        function showDialog(message) {
+          var dialogElement = document.querySelector('#dialog')
+          var dialogMessageElement = document.querySelector('#dialog_message')
+          dialogMessageElement.innerHTML = message
+          dialogElement.classList.add('show')
         }
       })()
     </script>

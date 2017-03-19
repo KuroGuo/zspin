@@ -1,0 +1,38 @@
+[
+  {
+    "name": "0.01 XZC",
+    "type": "zcoin",
+    "amount": 0.01,
+    "possibility": 100
+  },
+  {
+    "name": "0.03 XZC",
+    "type": "zcoin",
+    "amount": 0.03,
+    "possibility": 30
+  },
+  {
+    "name": "0.1 XZC",
+    "type": "zcoin",
+    "amount": 0.1,
+    "possibility": 10
+  },
+  {
+    "name": "1 XZC",
+    "type": "zcoin",
+    "amount": 1,
+    "possibility": 1
+  },
+  {
+    "name": "1 T-Shirt",
+    "type": "t_shirt",
+    "amount": 1,
+    "possibility": 0.5
+  },
+  {
+    "name": "3 XZC",
+    "type": "zcoin",
+    "amount": 3,
+    "possibility": 0.3
+  }
+]
