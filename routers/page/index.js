@@ -16,10 +16,12 @@ router.get('/', requireLogin, requireAnswered, async function (req, res, next) {
 
   const email = req.session.user.email
 
-  const user = await User.findOne({
+  let user = await User.findOne({
     where: { email },
     include: [Record]
   })
+
+  if (!user) user = await User.findOne({ where: { email } })
 
   const values = await Promise.all([user.getBalance(), user.getTShirt()])
 
@@ -113,7 +115,7 @@ router.get('/confirm', async function (req, res, next) { try {
           resolve(user)
         }).catch(err => { reject(err) })
       })
-      req.session.user = { email: user.email }
+      req.session.user = { id: user.id, email: user.email }
       res.redirect('/')
       break
     }

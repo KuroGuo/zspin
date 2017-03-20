@@ -11,6 +11,13 @@ body {
   margin: 0;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   overflow-x: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 @media (min-width: 1000px) {
@@ -93,16 +100,24 @@ body {
 }
 
 .page {
-  min-height: 76.4%;
+  -webkit-box-flex: .764;
+      -ms-flex: .764 0 auto;
+          flex: .764 0 auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -ms-flex-align: center;
+      -ms-flex-align: center;
           align-items: center;
   -webkit-box-pack: center;
-  -ms-flex-pack: center;
+      -ms-flex-pack: center;
           justify-content: center;
+}
+body:after {
+  content: '';
+  -webkit-box-flex: .236;
+      -ms-flex: .236 0 auto;
+          flex: .236 0 auto;
 }
 
 .container {
@@ -130,14 +145,22 @@ body {
   background-color: rgba(0, 0, 0, .3);
   display: none;
   z-index: 10000;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+          flex-direction: column;
   -webkit-animation: fade-in .4s both;
           animation: fade-in .4s both;
 }
 .dialog.show {
-  display: block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 .dialog-container {
-  min-height: 76.4%;
+  -webkit-box-flex: .764;
+      -ms-flex: .764 0 auto;
+          flex: .764 0 auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -147,6 +170,12 @@ body {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
           justify-content: center;
+}
+.dialog:after {
+  content: '';
+  -webkit-box-flex: .236;
+      -ms-flex: .236 0 auto;
+          flex: .236 0 auto;
 }
 .dialog-body {
   min-width: 215px;

@@ -9,6 +9,9 @@
     <link rel="shortcut icon" href="/favicon.png" />
     <link rel="stylesheet" href="/style/core.css" />
     <style>
+      .container {
+        padding-bottom: 20px;
+      }
       .spinner-wrapper {
         width: 270px;
         height: 270px;
@@ -159,15 +162,15 @@
         var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame
                             || window.mozRequestAnimationFrame || window.msRequestAnimationFrame
 
-        var rotate = 0
-        var rotateOffset = 20
-        var lastFrameRotate
+        var rotation = 0
+        var rotationOffset = 20
+        var lastRotation
         var speed = 0
         var maxSpeed = 360 * 3
 
         var frame, motion = function () {}
 
-        var spinnerRotates = {
+        var spinnerRotations = {
           '0.01 XZC': 0,
           '1 XZC': 62,
           '0.1 XZC': 117,
@@ -202,7 +205,23 @@
           spin()
         })
 
-        render()
+        function Renderer(render) {
+          this.render = render
+        }
+        Renderer.prototype.start = function () {
+          var renderer = this
+          var frame = function (time) {
+            requestAnimationFrame(frame)
+            renderer.render(time, renderer.lastFrameTime || time)
+            renderer.lastFrameTime = time
+          }
+          requestAnimationFrame(frame)
+        }
+
+        new Renderer(function (time, lastFrameTime) {
+          if (motion) motion(time - lastFrameTime)
+          rotate()
+        }).start()
 
         function showMask() {
           mask.classList.add('show')
@@ -231,7 +250,7 @@
             var balance = response.user.balance
             var tShirt = response.user.tShirt
             setTimeout(function () {
-              end(spinnerRotates[resultName], function () {
+              end(spinnerRotations[resultName], function () {
                 valueBalance.innerHTML = balance
                 valueTshirt.innerHTML = tShirt
                 closeMask()
@@ -253,43 +272,40 @@
           xhr.open("post", "/api/record", true)
           xhr.send()
         }
+
         function start() {
           var a = 360 * 6
           motion = function (timespan) {
             speed += a * (timespan / 1000)
             if (speed > maxSpeed) speed = maxSpeed
-            rotate += speed * (timespan / 1000)
+            rotation += speed * (timespan / 1000)
           }
         }
 
         function end(result, callback) {
-          var od = (360 - rotate % 360) + 6 * 360 + result
+          var od = (360 - rotation % 360) + 6 * 360 + result
           var d, t, a, gone = 0
           motion = function (timespan) {
             d = od - gone
             t = d / (speed / 2) - timespan / 1000
             a = speed / t
             speed -= a * (timespan / 1000)
-            if (speed < 0.000001) {
+            if (speed < 0.000001 || gone >= od) {
+              rotation = result
               speed = 0
               motion = null
               return callback()
             }
-            rotate += speed * (timespan / 1000)
+            rotation += speed * (timespan / 1000)
             gone += speed * (timespan / 1000)
           }
         }
 
-        function render(lastTime) {
-          requestAnimationFrame(function (time) {
-            if (!lastTime) lastTime = time
-            if (motion) motion(time - lastTime)
-            if (rotate === lastFrameRotate) return render(time)
-            render(time)
-            var r = ((rotate + rotateOffset) % 360).toFixed(6)
-            transform(spinner, 'rotate(' + r + 'deg)')
-            lastFrameRotate = rotate
-          })
+        function rotate() {
+          if (rotation === lastRotation) return
+          var r = ((rotation + rotationOffset) % 360).toFixed(6)
+          transform(spinner, 'rotate(' + r + 'deg)')
+          lastRotation = rotation
         }
 
         function transform(element, value) {
