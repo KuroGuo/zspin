@@ -14,14 +14,11 @@ router.get('/', requireLogin, requireAnswered, async function (req, res, next) {
   const User = req.app.db.User
   const Record = req.app.db.Record
 
-  const email = req.session.user.email
+  const userId = req.session.user.id
 
-  let user = await User.findOne({
-    where: { email },
-    include: [Record]
+  let user = await User.findById(userId, {
+    include: [{ model: Record, required: false }]
   })
-
-  if (!user) user = await User.findOne({ where: { email } })
 
   const values = await Promise.all([user.getBalance(), user.getTShirt()])
 
@@ -49,11 +46,11 @@ router.post('/login', async function (req, res, next) { try {
 
   const user = await User.findOne({
     where: { email },
-    attributes: ['email']
+    attributes: ['id', 'email']
   })
 
   if (user) {
-    req.session.user = { email: user.email }
+    req.session.user = { id: user.id, email: user.email }
     res.redirect('/')
   } else {
     const transporter = req.app.transporter

@@ -13,8 +13,8 @@
         padding-bottom: 20px;
       }
       .spinner-wrapper {
-        width: 270px;
-        height: 270px;
+        width: 272px;
+        height: 272px;
         position: relative;
       }
       .spinner {
@@ -22,12 +22,10 @@
         height: 100%;
         background-image: url(/style/images/spinner.jpg);
         background-repeat: no-repeat;
-        background-position: center;
-        background-size: 274px;
+        background-position: -3px -4px;
+        background-size: 277px 277px;
         border-radius: 100%;
         will-change: transform;
-        -webkit-transform: rotate(20deg);
-                transform: rotate(20deg);
       }
       .button-spin {
         position: absolute;
@@ -41,13 +39,15 @@
         background-image: url(/style/images/button-spin.png);
         background-repeat: no-repeat;
         background-position: center;
-        background-size: 103px;
+        background-size: contain;
         border-radius: 100%;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
                 user-select: none;
         cursor: pointer;
+        -webkit-transition: all .1s;
+        transition: all .1s;
       }
       .button-spin.depressed {
         -webkit-transform: scale(.97);
@@ -140,7 +140,12 @@
         </div>
         <form class="form-logout" method="post" action="/logout">
           <input id="form_logout_button_submit" type="submit" style="display: none;" />
-          <a class="link link-logout" onclick="document.querySelector('#form_logout_button_submit').click()">LOG OUT</a>
+          <a
+            class="link link-logout"
+            title="<%= user.email %>"
+            onclick="document.querySelector('#form_logout_button_submit').click()">
+            LOG OUT
+          </a>
         </form>
       </div>
     </div>
@@ -163,10 +168,11 @@
                             || window.mozRequestAnimationFrame || window.msRequestAnimationFrame
 
         var rotation = 0
-        var rotationOffset = 20
+        var rotationOffset = 0
         var lastRotation
         var speed = 0
         var maxSpeed = 360 * 3
+        var timeoutHandle
 
         var frame, motion = function () {}
 
@@ -242,24 +248,41 @@
               closeMask()
               return alert(response.error)
             }
-            if (xhr.status !== 201) {
-              closeMask()
-              return alert('Error: ' + xhr.statusText)
-            }
-            var resultName = response.name
-            var balance = response.user.balance
-            var tShirt = response.user.tShirt
-            setTimeout(function () {
-              end(spinnerRotations[resultName], function () {
-                valueBalance.innerHTML = balance
-                valueTshirt.innerHTML = tShirt
-                closeMask()
+            var endSpinTimeout = Math.max(3000 - (new Date().getTime() - timeSend), 0)
+            switch (xhr.status) {
+              case 201:
+                var resultName = response.name
+                var balance = response.user.balance
+                var tShirt = response.user.tShirt
+                clearTimeout(timeoutHandle)
+                timeoutHandle = setTimeout(function () {
+                  end(spinnerRotations[resultName], function () {
+                    valueBalance.innerHTML = balance
+                    valueTshirt.innerHTML = tShirt
+                    closeMask()
+                    showDialog([
+                      '<div class="dialog-title">Congratulations</div>',
+                      'You get<strong> ' + resultName + '</strong>'
+                    ].join(''))
+                  })
+                }, endSpinTimeout)
+                break
+              case 403:
                 showDialog([
-                  '<div class="dialog-title">Congratulations</div>',
-                  'You get<strong> ' + resultName + '</strong>'
+                  '<div class="dialog-title monospace">:(</div>',
+                  [
+                    '<b>Your chance has been used</b>',
+                    'Please try again after<strong> ' + toTimeString(response.waitTime) + '</strong>'
+                  ].join('\r\n')
                 ].join(''))
-              })
-            }, Math.max(3000 - (new Date().getTime() - timeSend), 0))
+                closeMask()
+                clearTimeout(timeoutHandle)
+                end(spinnerRotations[randomProperty(spinnerRotations)])
+                break
+              default:
+                closeMask()
+                alert('Error: ' + xhr.statusText)
+            }
           })
           xhr.addEventListener('timeout', function () {
             closeMask()
@@ -290,11 +313,11 @@
             t = d / (speed / 2) - timespan / 1000
             a = speed / t
             speed -= a * (timespan / 1000)
-            if (speed < 0.000001 || gone >= od) {
+            if (speed < 0.1 || gone >= od) {
               rotation = result
               speed = 0
               motion = null
-              return callback()
+              return callback ? callback() : null
             }
             rotation += speed * (timespan / 1000)
             gone += speed * (timespan / 1000)
@@ -321,6 +344,29 @@
           var dialogMessageElement = document.querySelector('#dialog_message')
           dialogMessageElement.innerHTML = message
           dialogElement.classList.add('show')
+        }
+
+        function randomProperty(obj) {
+          var keys = Object.keys(obj)
+          var randomIndex = Math.floor(Math.random() * keys.length)
+          return keys[randomIndex]
+        }
+
+        function toTimeString(timeSpan) {
+          var second = 1000
+          var minute = 60 * second
+          var hour = 60 * minute
+          var day = 24 * hour
+
+          if (timeSpan > day) {
+            return Math.round(timeSpan / day) + ' days'
+          } else if (timeSpan > hour) {
+            return Math.round(timeSpan / hour) + ' hours'
+          } else if (timeSpan > minute) {
+            return Math.round(timeSpan / minute) + ' minutes'
+          } else {
+            return Math.round(timeSpan / second) + ' seconds'
+          }
         }
       })()
     </script>

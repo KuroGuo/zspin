@@ -35,7 +35,8 @@ module.exports = () => {
   const Record = sequelize.define('record', {
     type: { type: Sequelize.ENUM('zcoin', 't_shirt') },
     amount: { type: Sequelize.DECIMAL },
-    sent: { type: Sequelize.BOOLEAN }
+    sent: { type: Sequelize.BOOLEAN },
+    ip: { type: Sequelize.STRING }
   }, {
     indexes: [ { fields: ['sent'] } ],
     defaultScope: { where: { sent: { $not: true } } }

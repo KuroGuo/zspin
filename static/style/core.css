@@ -26,6 +26,10 @@ body {
   }
 }
 
+.monospace {
+  font-family: Menlo, Monaco, Consolas, monospace;
+}
+
 .link {
   color: white;
   display: inline-block;
