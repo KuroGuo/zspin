@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>Zspin</title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <style>
+      .form-title {
+        margin-bottom: 20px;
+      }
+      .textbox {
+        margin-bottom: 10px;
+      }
+      .button-withdrawal {
+        margin-top: 10px;
+      }
+      .form {
+        padding-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="app">
+      <div class="container">
+        <div class="title"></div>
+        <form class="form" method="post">
+          <div class="form-title monospace">BALANCE: <%= balance %> XZC</div>
+          <div class="textbox">
+            <input
+              class="input"
+              name="address"
+              required="required"
+              placeholder="Zcoin address"
+              pattern="<%= regexp.source %>"
+              size="36"
+              autofocus="autofocus" />
+          </div>
+          <input id="button-submit" type="submit" style="display: none;" />
+          <span class="button button-withdrawal" onclick="submit()">WITHDRAWAL</span>
+          <div>
+            <a class="link" href="/">BACK</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function submit() {
+        var buttonSubmit = document.querySelector('#button-submit')
+        buttonSubmit.click()
+      }
+    </script>
+  </body>
+</html>

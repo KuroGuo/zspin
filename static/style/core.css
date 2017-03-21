@@ -1,3 +1,34 @@
+@media (min-height: 630px) {
+  html {
+    zoom: 1.07;
+  }
+}
+@media (min-height: 694px) {
+  html {
+    zoom: 1.18;
+  }
+}
+@media (min-height: 781px) {
+  html {
+    zoom: 1.33;
+  }
+}
+@media (min-height: 833px) {
+  html {
+    zoom: 1.41;
+  }
+}
+@media (min-height: 937px) {
+  html {
+    zoom: 1.59;
+  }
+}
+@media (min-height: 1250px) {
+  html {
+    zoom: 2.12;
+  }
+}
+
 html, body {
   height: 100%;
 }
@@ -20,7 +51,12 @@ body {
           flex-direction: column;
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1600px) {
+  body {
+    background-size: cover;
+  }
+}
+@media (min-height: 900px) {
   body {
     background-size: cover;
   }
@@ -34,12 +70,13 @@ body {
   color: white;
   display: inline-block;
   margin-top: 12px;
-  font-size: 12px;
+  font-size: 10px;
   text-decoration: none;
   cursor: pointer;
-}
-.link:hover {
-  text-decoration: underline;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+          user-select: none;
 }
 
 .textbox {
@@ -91,6 +128,12 @@ body {
   -webkit-box-align: center;
   -ms-flex-align: center;
           align-items: center;
+}
+.button > * {
+  pointer-events: none;
+}
+.button:active {
+  background-color: #1da546;
 }
 
 .title {
@@ -183,7 +226,6 @@ body:after {
 }
 .dialog-body {
   min-width: 215px;
-  background-color: white;
   border-radius: 4px;
   overflow: hidden;
   text-align: center;
@@ -192,6 +234,7 @@ body:after {
           animation: jump-in .4s cubic-bezier(.6, 0, .32, 1.51) both;
 }
 .dialog-message {
+  background-color: white;
   padding: 10px;
   line-height: 1.618;
   white-space: pre;
@@ -219,12 +262,11 @@ body:after {
   -ms-user-select: none;
           user-select: none;
 }
-.dialog-button-close:hover {
-  opacity: 0.9;
+.dialog-button-close > * {
+  pointer-events: none;
 }
 .dialog-button-close:active {
-  opacity: 1;
-  box-shadow: inset 0 1px 3px #878f90;
+  background-color: #1da546;
 }
 
 @-webkit-keyframes fade-in {

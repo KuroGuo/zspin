@@ -92,6 +92,8 @@
         border-radius: 12px;
         padding: 0 6px;
         font-size: 10px;
+        color: white;
+        text-decoration: none;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -131,11 +133,11 @@
         <div class="panel">
           <div class="panel-row panel-row-balance">
             <div>BALANCE: <span id="value_balance"><%= balance %></span> XZC</div>
-            <a class="panel-button">WITHDRAWAL</a>
+            <a class="panel-button" href="/withdrawal">WITHDRAWAL</a>
           </div>
           <div class="panel-row panel-row-rewards">
             <div>REWARDS: <span id="value_tshirt"><%= tShirt %></span> T-Shirt</div>
-            <a class="panel-button">CLAIM</a>
+            <a class="panel-button" href="/claim">CLAIM</a>
           </div>
         </div>
         <form class="form-logout" method="post" action="/logout">

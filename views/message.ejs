@@ -21,7 +21,11 @@
         <div class="title"></div>
         <div class="form">
           <div class="message"><%= message %></div>
-          <a class="link" href="javascript: history.back()">back</a>
+          <% if (locals.backHref) { %>
+            <a class="link" href="<%= backHref %>">BACK</a>
+          <% } else { %>
+            <a class="link" href="javascript: history.back()">BACK</a>
+          <% } %>
         </div>
       </div>
     </div>

@@ -49,8 +49,8 @@ router.post('/record', async function (req, res, next) { try {
 
   values = await Promise.all([user.getBalance(), user.getTShirt()])
 
-  const balance = values[0].toFixed(2)
-  const tShirt = values[1].toFixed()
+  const balance = values[0]
+  const tShirt = values[1]
 
   res.status(201).send({
     name: option.name,
