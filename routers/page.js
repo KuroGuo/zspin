@@ -3,11 +3,11 @@ const config = require('config')
 const jwt = require('jsonwebtoken')
 const validator = require('validator')
 
-const requireLogin = require('../../middlewares/require-login')
-const requireAnswered = require('../../middlewares/require-answered')
-const questions = require('../../data/questions')
-const arrayHelper = require('../../helpers/array')
-const validateHelper = require('../../helpers/validator')
+const requireLogin = require('../middlewares/require-login')
+const requireAnswered = require('../middlewares/require-answered')
+const questions = require('../data/questions')
+const arrayHelper = require('../helpers/array')
+const validateHelper = require('../helpers/validator')
 
 const router = express.Router()
 
@@ -235,7 +235,8 @@ router.post('/withdrawal', requireLogin, withdrawalRequestMiddleware, (req, res)
     message: [
       'We have sent you an email confirmation',
       'Please check your email to confirm'
-    ].join('\r\n')
+    ].join('\r\n'),
+    backHref: '/'
   })
 })
 
@@ -335,7 +336,8 @@ router.post('/claim', requireLogin, claimRequestMiddleware, (req, res, next) => 
     message: [
       'We have sent you an email confirmation',
       'Please check your email to confirm'
-    ].join('\r\n')
+    ].join('\r\n'),
+    backHref: '/'
   })
 })
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title>Zspin Admin</title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <link rel="stylesheet" href="/style/card.css" />
+    <style>
+      .message {
+        white-space: pre;
+        line-height: 1.618;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="app">
+      <div class="container">
+        <div class="form">
+          <div class="message"><%= message %></div>
+          <% if (locals.backHref) { %>
+            <a class="link" href="<%= backHref %>">BACK</a>
+          <% } else { %>
+            <a class="link" href="javascript: history.back()">BACK</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

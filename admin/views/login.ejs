@@ -8,6 +8,7 @@
     <title><%= appName %></title>
     <link rel="shortcut icon" href="/favicon.png" />
     <link rel="stylesheet" href="/style/core.css" />
+    <link rel="stylesheet" href="/style/card.css" />
     <style>
       .form-title {
         margin-bottom: 20px;
@@ -15,48 +16,27 @@
       .textbox {
         margin-bottom: 10px;
       }
-      .button-claim {
+      .button-login {
         margin-top: 10px;
       }
-      .form {
-        padding-bottom: 12px;
+      .textbox-label {
+        color: #555;
+        font-size: 12px;
+        padding-left: 9px;
       }
     </style>
   </head>
   <body>
     <div class="page" id="app">
       <div class="container">
-        <div class="title"></div>
         <form class="form" method="post">
-          <div class="form-title monospace">REWARDS: <%= tShirt %> T-Shirt</div>
+          <div class="form-title">LOG IN TO ZSPIN ADMIN</div>
           <div class="textbox">
-            <input
-              class="input"
-              name="address"
-              required="required"
-              placeholder="Address"
-              size="100"
-              autofocus="autofocus" />
-          </div>
-          <div class="textbox">
-            <input
-              class="input"
-              name="receiver"
-              required="required"
-              placeholder="Receiver" />
-          </div>
-          <div class="textbox">
-            <input
-              class="input"
-              name="phone"
-              required="required"
-              placeholder="Phone" />
+            <span class="textbox-label">PASSWORD:</span>
+            <input class="input" name="password" type="password" required="required" autofocus="autofocus" />
           </div>
           <input id="button-submit" type="submit" style="display: none;" />
-          <span class="button button-claim" onclick="submit()">CLAIM</span>
-          <div>
-            <a class="link" href="/">BACK</a>
-          </div>
+          <span class="button button-login" onclick="submit()">LOG IN</span>
         </form>
       </div>
     </div>

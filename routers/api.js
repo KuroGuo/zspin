@@ -1,7 +1,8 @@
 const express = require('express')
 const requestIp = require('request-ip')
+const config = require('config')
 
-const spinner = require('../../data/spinner')
+const spinner = require('../data/spinner')
 
 const router = express.Router()
 
@@ -9,8 +10,7 @@ router.post('/record', async function (req, res, next) { try {
   const userId = req.session.user.id
   const email = req.session.user.email
   const ip = requestIp.getClientIp(req)
-  // const interval = 12 * 60 * 60 * 1000
-  const interval = 60 * 1000
+  const interval = config.get('spinInterval')
 
   const User = req.app.db.User
   const Record = req.app.db.Record

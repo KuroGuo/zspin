@@ -1,5 +1,10 @@
 module.exports = {
   siteURL: 'https://zspin.zcoin.io/',
+  port: 80,
+  admin: {
+    port: 3001,
+    password: 'password'
+  },
   cookieSession: {
     name: 'session',
     secret: 'secret',
@@ -23,5 +28,6 @@ module.exports = {
       pass: 'password'
     }
   },
-  jsonWebTokenSecret: 'secret'
+  jsonWebTokenSecret: 'secret',
+  spinInterval: 12 * 60 * 60 * 1000
 }

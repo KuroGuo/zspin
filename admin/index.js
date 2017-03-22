@@ -9,12 +9,12 @@ const compression = require('compression')
 const apiRouter = require('./routers/api')
 const pageRouter = require('./routers/page')
 
-const errorHandler = require('./middlewares/error-handler')
+const errorHandler = require('../middlewares/error-handler')
 
 module.exports = (database, logger, transporter) => {
   const app = express()
 
-  app.locals.appName = 'Zspin'
+  app.locals.appName = 'Zspin Admin'
 
   app.db = database
   app.logger = logger
@@ -22,6 +22,7 @@ module.exports = (database, logger, transporter) => {
 
   app.engine('ejs', ejs.renderFile)
   app.set('view engine', 'ejs')
+  app.set('views', path.normalize(`${__dirname}/views`))
 
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())

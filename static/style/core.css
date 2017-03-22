@@ -62,7 +62,7 @@ body {
   }
 }
 
-.monospace {
+.monospace, .textbox, .input {
   font-family: Menlo, Monaco, Consolas, monospace;
 }
 
@@ -192,6 +192,7 @@ body:after {
   background-color: rgba(0, 0, 0, .3);
   display: none;
   z-index: 10000;
+  will-change: opacity;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
