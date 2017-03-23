@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title><%= appName %></title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <link rel="stylesheet" href="/style/card.css" />
+    <style>
+      .form-title {
+        margin-bottom: 20px;
+      }
+      .textbox {
+        margin-bottom: 10px;
+      }
+      .button-login {
+        margin-top: 10px;
+      }
+      .field {
+        text-align: left;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+      .field-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="app">
+      <div class="container">
+        <form class="form" method="post" action="resolve">
+          <div class="field">
+            <div class="field-name">ID</div>
+            <div class="field-value monospace"><%= withdrawalRequest.id %></div>
+          </div>
+          <div class="field">
+            <div class="field-name">Email</div>
+            <div class="field-value monospace"><%= withdrawalRequest.user.email %></div>
+          </div>
+          <div class="field">
+            <div class="field-name">Address</div>
+            <div class="field-value monospace"><%= withdrawalRequest.address %></div>
+          </div>
+          <div class="field">
+            <div class="field-name">Amount</div>
+            <div class="field-value monospace"><%= amount %></div>
+          </div>
+          <div class="field">
+            <div class="field-name">Transaction ID</div>
+            <div class="field-value">
+              <div class="textbox">
+                <input class="input" name="txid" type="txid" required="required" size="65" onchange="this.value = this.value.trim()" />
+              </div>
+            </div>
+          </div>
+          <input id="button_submit_resolve" type="submit" style="display: none;" />
+          <input type="hidden" name="id" value="<%= withdrawalRequest.id %>" />
+          <input type="hidden" name="amount" value="<%= amount %>" />
+          <input type="hidden" name="recordIds" value="<%= recordIds %>" />
+          <span
+            class="button button-login"
+            onclick="document.querySelector('#button_submit_resolve').click()">
+            Resolve
+          </span>
+          <span
+            class="button button-login button-red"
+            onclick="document.querySelector('#button_submit_reject').click()">
+            Reject
+          </span>
+        </form>
+        <form method="post" action="reject" id="form_reject" style="display: none;">
+          <input type="hidden" name="id" value="<%= withdrawalRequest %>" />
+          <input id="button_submit_reject" type="submit" style="display: none;" />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

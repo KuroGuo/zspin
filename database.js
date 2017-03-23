@@ -62,6 +62,11 @@ module.exports = () => {
     defaultScope: { where: { status: 'pending' } }
   })
 
+  const WithdrawalRequestResolved = sequelize.define('withdrawalRequestResolved', {
+    amount: Sequelize.DECIMAL,
+    txid: Sequelize.STRING
+  })
+
   const ClaimRequest = sequelize.define('claimRequest', {
     address: Sequelize.STRING,
     receiver: Sequelize.STRING,
@@ -72,11 +77,24 @@ module.exports = () => {
     defaultScope: { where: { status: 'pending' } }
   })
 
+  const ClaimRequestResolved = sequelize.define('claimRequestResolved', {
+    amount: Sequelize.DECIMAL,
+    tracking: Sequelize.STRING
+  })
+
   User.hasMany(Record)
   User.hasOne(WithdrawalRequest)
   User.hasOne(ClaimRequest)
+
   WithdrawalRequest.belongsTo(User)
+  WithdrawalRequest.hasOne(WithdrawalRequestResolved)
+
   ClaimRequest.belongsTo(User)
+  ClaimRequest.hasOne(ClaimRequestResolved)
+
+  WithdrawalRequestResolved.hasMany(Record)
+
+  ClaimRequestResolved.hasMany(Record)
 
   sequelize.sync()
 
@@ -85,6 +103,8 @@ module.exports = () => {
     User,
     Record,
     WithdrawalRequest,
-    ClaimRequest
+    WithdrawalRequestResolved,
+    ClaimRequest,
+    ClaimRequestResolved
   }
 }

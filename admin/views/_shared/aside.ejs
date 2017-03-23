@@ -1,0 +1,21 @@
+<div class="aside">
+  <div class="menu">
+    <a class="menu-item<%= view === 'dashborad' ? ' active' : '' %>" href="/">Dashborad</a>
+    <div class="menu-items" text="Withdrawal Requests">
+      <a class="menu-item<%= view === 'withdrawalRequestsPending' ? ' active' : '' %>" href="/withdrawal-requests/pending">pending</a>
+      <a class="menu-item<%= view === 'withdrawalRequestsResolved' ? ' active' : '' %>" href="/withdrawal-requests/resolved">Resolved</a>
+      <a class="menu-item<%= view === 'withdrawalRequestsReject' ? ' active' : '' %>" href="/withdrawal-requests/reject">Reject</a>
+    </div>
+    <div class="menu-items" text="Claim Requests">
+      <a class="menu-item<%= view === 'claimRequestsPending' ? ' active' : '' %>" href="/claim-requests/pending">pending</a>
+      <a class="menu-item<%= view === 'claimRequestsResolved' ? ' active' : '' %>" href="/claim-requests/resolved">Resolved</a>
+      <a class="menu-item<%= view === 'claimRequestsReject' ? ' active' : '' %>" href="/claim-requests/reject">Reject</a>
+    </div>
+    <div class="menu-items" text="System">
+      <form method="post" action="/logout">
+        <input id="button_form_logout_submit" type="submit" style="display: none;" />
+        <a class="menu-item" onclick="document.querySelector('#button_form_logout_submit').click()">Log out</a>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title><%= appName %></title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <link rel="stylesheet" href="/style/dashborad.css" />
+    <style>
+      .main {
+        padding: 20px;
+        font-size: 18px;
+        line-height: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('_shared/aside', { view: 'dashborad' }) %>
+    <div class="main">
+      <div class="row">Total users: <span class="monospace"><%= totalUsersCount %></span></div>
+      <div class="row">Pending withdrawal requests: <span class="monospace"><%= pendingWithdrawalRequestsCount %></span></div>
+      <div class="row">Pending claim requests: <span class="monospace"><%= pendingClaimRequestsCount %></span></div>
+    </div>
+  </body>
+</html>
