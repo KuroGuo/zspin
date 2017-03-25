@@ -34,28 +34,36 @@
   <body>
     <div class="page" id="app">
       <div class="container">
-        <form class="form" method="post" action="resolve/<%= withdrawalRequest.id %>">
+        <form class="form" method="post" action="resolve/<%= claimRequest.id %>">
           <div class="field">
             <div class="field-name">ID</div>
-            <div class="field-value monospace"><%= withdrawalRequest.id %></div>
+            <div class="field-value monospace"><%= claimRequest.id %></div>
           </div>
           <div class="field">
             <div class="field-name">Email</div>
-            <div class="field-value monospace"><%= withdrawalRequest.user.email %></div>
+            <div class="field-value monospace"><%= claimRequest.user.email %></div>
           </div>
           <div class="field">
             <div class="field-name">Address</div>
-            <div class="field-value monospace"><%= withdrawalRequest.address %></div>
+            <div class="field-value monospace"><%= claimRequest.address %></div>
+          </div>
+          <div class="field">
+            <div class="field-name">Receiver</div>
+            <div class="field-value monospace"><%= claimRequest.receiver %></div>
+          </div>
+          <div class="field">
+            <div class="field-name">Phone</div>
+            <div class="field-value monospace"><%= claimRequest.phone %></div>
           </div>
           <div class="field">
             <div class="field-name">Amount</div>
             <div class="field-value monospace"><%= amount %></div>
           </div>
           <div class="field">
-            <div class="field-name">Transaction ID</div>
+            <div class="field-name">tracking</div>
             <div class="field-value">
               <div class="textbox">
-                <input class="input" name="txid" required="required" size="65" onchange="this.value = this.value.trim()" />
+                <input class="input" name="tracking" required="required" size="65" onchange="this.value = this.value.trim()" />
               </div>
             </div>
           </div>
@@ -73,7 +81,7 @@
             Reject
           </span>
         </form>
-        <form method="post" action="reject/<%= withdrawalRequest.id %>" id="form_reject" style="display: none;">
+        <form method="post" action="reject/<%= claimRequest.id %>" id="form_reject" style="display: none;">
           <input id="button_submit_reject" type="submit" style="display: none;" />
         </form>
       </div>

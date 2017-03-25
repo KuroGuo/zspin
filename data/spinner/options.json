@@ -27,7 +27,7 @@
     "name": "1 T-Shirt",
     "type": "t_shirt",
     "amount": 1,
-    "possibility": 0.5
+    "possibility": 1
   },
   {
     "name": "3 XZC",

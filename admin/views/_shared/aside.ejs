@@ -4,12 +4,12 @@
     <div class="menu-items" text="Withdrawal Requests">
       <a class="menu-item<%= view === 'withdrawalRequestsPending' ? ' active' : '' %>" href="/withdrawal-requests/pending">pending</a>
       <a class="menu-item<%= view === 'withdrawalRequestsResolved' ? ' active' : '' %>" href="/withdrawal-requests/resolved">Resolved</a>
-      <a class="menu-item<%= view === 'withdrawalRequestsReject' ? ' active' : '' %>" href="/withdrawal-requests/reject">Reject</a>
+      <a class="menu-item<%= view === 'withdrawalRequestsRejected' ? ' active' : '' %>" href="/withdrawal-requests/rejected">Reject</a>
     </div>
     <div class="menu-items" text="Claim Requests">
       <a class="menu-item<%= view === 'claimRequestsPending' ? ' active' : '' %>" href="/claim-requests/pending">pending</a>
       <a class="menu-item<%= view === 'claimRequestsResolved' ? ' active' : '' %>" href="/claim-requests/resolved">Resolved</a>
-      <a class="menu-item<%= view === 'claimRequestsReject' ? ' active' : '' %>" href="/claim-requests/reject">Reject</a>
+      <a class="menu-item<%= view === 'claimRequestsRejected' ? ' active' : '' %>" href="/claim-requests/rejected">Reject</a>
     </div>
     <div class="menu-items" text="System">
       <form method="post" action="/logout">

@@ -178,7 +178,10 @@ const withdrawalRequestMiddleware = async function (req, res, next) { try {
   const balance = await user.getBalance()
 
   if (parseFloat(balance) < 1) {
-    return res.render('message', { message: 'Minumal withdrawal: 1 XZC' })
+    return res.render('message', {
+      message: 'Minumal withdrawal: 1 XZC',
+      backHref: '/'
+    })
   }
 
   res.locals.user = user
@@ -189,7 +192,8 @@ const withdrawalRequestMiddleware = async function (req, res, next) { try {
       message: [
         `Your already have a withdrawal request #${user.withdrawalRequest.id}`,
         'Please wait 24 hours for review'
-      ].join('\r\n')
+      ].join('\r\n'),
+      backHref: '/'
     })
   }
 
@@ -200,7 +204,7 @@ router.get('/withdrawal', requireLogin, withdrawalRequestMiddleware, (req, res) 
   res.render('withdrawal', { regexp: validateHelper.regexps.zcoinAddress })
 })
 
-router.post('/withdrawal', requireLogin, withdrawalRequestMiddleware, (req, res) => {
+router.post('/withdrawal', requireLogin, withdrawalRequestMiddleware, (req, res, next) => {
   const address = req.body.address.trim()
 
   if (!validateHelper.isZcoinAddress(address)) {
@@ -279,7 +283,10 @@ const claimRequestMiddleware = async function (req, res, next) { try {
   const tShirt = await user.getTShirt()
 
   if (parseFloat(tShirt) < 1) {
-    return res.render('message', { message: 'Minumal claim: 1 T-Shirt' })
+    return res.render('message', {
+      message: 'Minumal claim: 1 T-Shirt',
+      backHref: '/'
+    })
   }
 
   res.locals.user = user
@@ -290,7 +297,8 @@ const claimRequestMiddleware = async function (req, res, next) { try {
       message: [
         `Your already have a claim request #${user.claimRequest.id}`,
         'Please wait 24 hours for review'
-      ].join('\r\n')
+      ].join('\r\n'),
+      backHref: '/'
     })
   }
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title><%= appName %></title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <link rel="stylesheet" href="/style/dashborad.css" />
+    <style>
+      .buttons {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../_shared/aside', { view: 'claimRequestsRejected' }) %>
+    <div class="main">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Receiver</th>
+            <th>Phone</th>
+          </tr>
+        </thead>
+        <tbody class="monospace">
+          <% claimRequests.forEach(w => { %>
+            <tr>
+              <td><%= w.id %></td>
+              <td><%= w.user.email %></td>
+              <td><%= w.address %></td>
+              <td><%= w.receiver %></td>
+              <td><%= w.phone %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

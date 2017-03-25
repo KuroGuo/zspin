@@ -20,8 +20,5 @@
     "request-ip": "^2.0.1",
     "sequelize": "^3.30.2",
     "validator": "^7.0.0"
-  },
-  "scripts": {
-    "dev": "NODE_ENV=development node index"
   }
 }
