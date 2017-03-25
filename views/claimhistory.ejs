@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <title><%= appName %></title>
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="stylesheet" href="/style/core.css" />
+    <style>
+      th, td {
+        padding: 1px 4px;
+        font-size: 12px;
+      }
+      td {
+        font-family: Menlo, Monaco, Consolas, monospace;
+      }
+      .pending {
+        color: #2196F3;
+      }
+      .resolved {
+        color: #4CAF50;
+      }
+      .rejected {
+        color: #F44336;
+      }
+      .amount {
+        text-align: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="app">
+      <div class="container">
+        <div class="title"></div>
+        <div class="form">
+          <table>
+            <thead>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Address</th>
+              <th>Receiver</th>
+              <th>Phone</th>
+              <th>Amount</th>
+            </thead>
+            <tbody>
+              <% claimRequests.forEach(w => { %>
+                <tr>
+                  <td><%= dates[w.id] %></td>
+                  <td><strong class="<%= w.status %>"><%= w.status %></strong></td>
+                  <td><%= w.address %></td>
+                  <td><%= w.receiver %></td>
+                  <td><%= w.phone %></td>
+                  <td class="amount"><%= w.claimRequestResolved && (w.claimRequestResolved.amount + ' T-Shirt') %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <div class="bottom-links">
+            <a class="link" href="/claim">BACK</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -31,6 +31,7 @@
           <div class="form-title monospace">REWARDS: <%= tShirt %> T-Shirt</div>
           <div class="textbox">
             <input
+              id="input_address"
               class="input"
               name="address"
               required="required"
@@ -40,6 +41,7 @@
           </div>
           <div class="textbox">
             <input
+              id="input_receiver"
               class="input"
               name="receiver"
               required="required"
@@ -47,6 +49,7 @@
           </div>
           <div class="textbox">
             <input
+              id="input_phone"
               class="input"
               name="phone"
               required="required"
@@ -54,7 +57,8 @@
           </div>
           <input id="button-submit" type="submit" style="display: none;" />
           <span class="button button-claim" onclick="submit()">CLAIM</span>
-          <div>
+          <div class="bottom-links">
+            <a class="link" href="/claim/history">HISTORY</a>
             <a class="link" href="/">BACK</a>
           </div>
         </form>
@@ -62,7 +66,18 @@
     </div>
 
     <script>
+      var inputAddress = document.querySelector('#input_address')
+      var inputReceiver = document.querySelector('#input_receiver')
+      var inputPhone = document.querySelector('#input_phone')
+
+      inputAddress.value = localStorage.claimAddress || ''
+      inputReceiver.value = localStorage.claimReceiver || ''
+      inputPhone.value = localStorage.claimPhone || ''
+
       function submit() {
+        localStorage.claimAddress = inputAddress.value
+        localStorage.claimReceiver = inputReceiver.value
+        localStorage.claimPhone = inputPhone.value
         var buttonSubmit = document.querySelector('#button-submit')
         buttonSubmit.click()
       }

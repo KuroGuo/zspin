@@ -32,6 +32,18 @@ module.exports = () => {
           .map(r => parseFloat(r.amount))
           .reduce(((a, b) => a + b), 0)
           .toFixed()
+      },
+      async getWithdrawalRequest() {
+        const withdrawalRequests = this.withdrawalRequests ||
+          (await this.getWithdrawalRequests())
+
+        return withdrawalRequests && withdrawalRequests[0]
+      },
+      async getClaimRequest() {
+        const claimRequests = this.claimRequests ||
+          (await this.getClaimRequests())
+
+        return claimRequests && claimRequests[0]
       }
     }
   })
@@ -83,8 +95,8 @@ module.exports = () => {
   })
 
   User.hasMany(Record)
-  User.hasOne(WithdrawalRequest)
-  User.hasOne(ClaimRequest)
+  User.hasMany(WithdrawalRequest)
+  User.hasMany(ClaimRequest)
 
   WithdrawalRequest.belongsTo(User)
   WithdrawalRequest.hasOne(WithdrawalRequestResolved)

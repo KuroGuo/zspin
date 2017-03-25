@@ -187,10 +187,12 @@ const withdrawalRequestMiddleware = async function (req, res, next) { try {
   res.locals.user = user
   res.locals.balance = balance
 
-  if (user.withdrawalRequest) {
+  const withdrawalRequest = await user.getWithdrawalRequest()
+
+  if (withdrawalRequest) {
     return res.render('message', {
       message: [
-        `Your already have a withdrawal request #${user.withdrawalRequest.id}`,
+        `Your already have a withdrawal request #${withdrawalRequest.id}`,
         'Please wait 24 hours for review'
       ].join('\r\n'),
       backHref: '/'
@@ -200,9 +202,25 @@ const withdrawalRequestMiddleware = async function (req, res, next) { try {
   next()
 } catch (err) { next(err) } }
 
-router.get('/withdrawal', requireLogin, withdrawalRequestMiddleware, (req, res) => {
-  res.render('withdrawal', { regexp: validateHelper.regexps.zcoinAddress })
-})
+router.get('/withdrawal', requireLogin, async function (req, res, next) { try {
+  const userId = req.session.user.id
+
+  const User = req.app.db.User
+  const Record = req.app.db.Record
+
+  const user = await User.findById(userId, {
+    include: [
+      { model: Record, required: false }
+    ]
+  })
+
+  const balance = await user.getBalance()
+
+  res.render('withdrawal', {
+    regexp: validateHelper.regexps.zcoinAddress,
+    balance
+  })
+} catch (err) { next(err) } })
 
 router.post('/withdrawal', requireLogin, withdrawalRequestMiddleware, (req, res, next) => {
   const address = req.body.address.trim()
@@ -292,10 +310,12 @@ const claimRequestMiddleware = async function (req, res, next) { try {
   res.locals.user = user
   res.locals.tShirt = tShirt
 
-  if (user.claimRequest) {
+  const claimRequest = await user.getClaimRequest()
+
+  if (claimRequest) {
     return res.render('message', {
       message: [
-        `Your already have a claim request #${user.claimRequest.id}`,
+        `Your already have a claim request #${claimRequest.id}`,
         'Please wait 24 hours for review'
       ].join('\r\n'),
       backHref: '/'
@@ -305,9 +325,59 @@ const claimRequestMiddleware = async function (req, res, next) { try {
   next()
 } catch (err) { next(err) } }
 
-router.get('/claim', requireLogin, claimRequestMiddleware, (req, res) => {
-  res.render('claim')
-})
+router.get('/withdrawal/history', async function (req, res, next) { try {
+  const userId = req.session.user.id
+
+  const User = req.app.db.User
+  const WithdrawalRequest = req.app.db.WithdrawalRequest
+  const WithdrawalRequestResolved = req.app.db.WithdrawalRequestResolved
+
+  const user = await User.findById(userId, {
+    include: [{
+      model: WithdrawalRequest.unscoped(),
+      required: false,
+      include: [{
+        model: WithdrawalRequestResolved,
+        required: false
+      }]
+    }]
+  })
+
+  const withdrawalRequests = user.withdrawalRequests.sort((a, b) => b.id - a.id)
+
+  const dates = {}
+
+  withdrawalRequests.forEach(w => {
+    const createdAt = w.createdAt
+
+    const year = 1900 + createdAt.getYear()
+    const month = 1 + createdAt.getMonth()
+    const date = createdAt.getDate()
+
+    dates[w.id] = `${year}/${month}/${date}`
+  })
+
+  res.render('withdrawalhistory', {
+    withdrawalRequests, dates
+  })
+} catch (err) { next(err) } })
+
+router.get('/claim', requireLogin, async function (req, res, next) { try {
+  const userId = req.session.user.id
+
+  const User = req.app.db.User
+  const Record = req.app.db.Record
+
+  const user = await User.findById(userId, {
+    include: [
+      { model: Record, required: false }
+    ]
+  })
+
+  const tShirt = await user.getTShirt()
+
+  res.render('claim', { tShirt })
+} catch (err) { next(err) } })
 
 router.post('/claim', requireLogin, claimRequestMiddleware, (req, res, next) => {
   const address = req.body.address
@@ -374,6 +444,43 @@ router.get('/claim/confirm', requireLogin, claimRequestMiddleware, async functio
       'Please wait 24 hours for review'
     ].join('\r\n'),
     backHref: '/'
+  })
+} catch (err) { next(err) } })
+
+router.get('/claim/history', async function (req, res, next) { try {
+  const userId = req.session.user.id
+
+  const User = req.app.db.User
+  const ClaimRequest = req.app.db.ClaimRequest
+  const ClaimRequestResolved = req.app.db.ClaimRequestResolved
+
+  const user = await User.findById(userId, {
+    include: [{
+      model: ClaimRequest.unscoped(),
+      required: false,
+      include: [{
+        model: ClaimRequestResolved,
+        required: false
+      }]
+    }]
+  })
+
+  const claimRequests = user.claimRequests.sort((a, b) => b.id - a.id)
+
+  const dates = {}
+
+  claimRequests.forEach(w => {
+    const createdAt = w.createdAt
+
+    const year = 1900 + createdAt.getYear()
+    const month = 1 + createdAt.getMonth()
+    const date = createdAt.getDate()
+
+    dates[w.id] = `${year}/${month}/${date}`
+  })
+
+  res.render('claimhistory', {
+    claimRequests, dates
   })
 } catch (err) { next(err) } })
 

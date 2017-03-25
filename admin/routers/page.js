@@ -160,7 +160,6 @@ router.get('/withdrawal-requests/resolved', async function (req, res, next) { tr
 
 router.get('/withdrawal-requests/rejected', async function (req, res, next) { try {
   const WithdrawalRequest = req.app.db.WithdrawalRequest
-  const WithdrawalRequestResolved = req.app.db.WithdrawalRequestResolved
   const User = req.app.db.User
 
   const withdrawalRequests = await WithdrawalRequest.findAll({
@@ -320,7 +319,6 @@ router.get('/claim-requests/resolved', async function (req, res, next) { try {
 
 router.get('/claim-requests/rejected', async function (req, res, next) { try {
   const ClaimRequest = req.app.db.ClaimRequest
-  const ClaimRequestResolved = req.app.db.ClaimRequestResolved
   const User = req.app.db.User
 
   const claimRequests = await ClaimRequest.findAll({

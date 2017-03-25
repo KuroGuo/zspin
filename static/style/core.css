@@ -270,6 +270,10 @@ body:after {
   background-color: #1da546;
 }
 
+.bottom-links > .link {
+  display: block;
+}
+
 @-webkit-keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }

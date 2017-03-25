@@ -31,6 +31,7 @@
           <div class="form-title monospace">BALANCE: <%= balance %> XZC</div>
           <div class="textbox">
             <input
+              id="input_address"
               class="input"
               name="address"
               required="required"
@@ -41,7 +42,8 @@
           </div>
           <input id="button-submit" type="submit" style="display: none;" />
           <span class="button button-withdrawal" onclick="submit()">WITHDRAWAL</span>
-          <div>
+          <div class="bottom-links">
+            <a class="link" href="/withdrawal/history">HISTORY</a>
             <a class="link" href="/">BACK</a>
           </div>
         </form>
@@ -49,7 +51,12 @@
     </div>
 
     <script>
+      var inputAddress = document.querySelector('#input_address')
+
+      inputAddress.value = localStorage.withdrawalAddress || ''
+
       function submit() {
+        localStorage.withdrawalAddress = inputAddress.value
         var buttonSubmit = document.querySelector('#button-submit')
         buttonSubmit.click()
       }
